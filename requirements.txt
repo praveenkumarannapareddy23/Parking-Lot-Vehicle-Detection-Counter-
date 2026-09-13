@@ -1,7 +1,7 @@
 # ── Core Computer Vision & AI Detection ──
 ultralytics>=8.3.0          # Pre-trained YOLO11 models & ByteTrack multi-object tracker
 lapx>=0.5.12                # Linear assignment solver required by ByteTrack tracker
-opencv-python>=4.10.0       # Image & video decoding, rendering bounding boxes, ROI math
+opencv-python-headless>=4.10.0  # Headless OpenCV for cloud servers (Streamlit Cloud, Docker, Linux)
 torch>=2.2.0                # PyTorch deep learning inference engine
 torchvision>=0.17.0         # Computer vision utilities for PyTorch
 
