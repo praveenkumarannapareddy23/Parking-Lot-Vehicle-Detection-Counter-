@@ -276,31 +276,42 @@ st.markdown(
     .dot-blue {background: #6C63FF; color: #6C63FF;}
     .dot-amber {background: #fbbf24; color: #fbbf24;}
 
-    /* ── Source picker cards ─────────────────────────────────────────────── */
-    .source-card {
-        border: 2px solid rgba(255,255,255,0.08);
-        border-radius: 16px;
-        padding: 1.5rem;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        background: rgba(26, 29, 41, 0.6);
-        backdrop-filter: blur(20px);
+    /* ── Source picker radio cards ───────────────────────────────────────── */
+    div[aria-label="Source Selector"] {
+        display: flex !important;
+        gap: 1.2rem !important;
+        width: 100% !important;
+        margin-bottom: 0.8rem !important;
     }
-    .source-card:hover {
-        border-color: rgba(108,99,255,0.4);
-        background: rgba(108,99,255,0.08);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(108,99,255,0.1);
+    div[aria-label="Source Selector"] > label {
+        flex: 1 !important;
+        background: rgba(26, 29, 41, 0.7) !important;
+        border: 2px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 16px !important;
+        padding: 1.2rem 1.5rem !important;
+        text-align: center !important;
+        cursor: pointer !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        backdrop-filter: blur(20px) !important;
+        font-weight: 600 !important;
+        color: #e8e8ec !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
-    .source-card.active {
-        border-color: #6C63FF;
-        background: rgba(108,99,255,0.1);
-        box-shadow: 0 0 0 3px rgba(108,99,255,0.2), 0 8px 24px rgba(108,99,255,0.15);
+    div[aria-label="Source Selector"] > label:hover {
+        border-color: rgba(108, 99, 255, 0.5) !important;
+        background: rgba(108, 99, 255, 0.1) !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 24px rgba(108, 99, 255, 0.15) !important;
     }
-    .source-card .source-icon {font-size: 2rem; margin-bottom: 0.4rem;}
-    .source-card .source-label {font-size: 0.9rem; font-weight: 600; color: #e8e8ec;}
-    .source-card .source-desc {font-size: 0.75rem; color: #8892a8; margin-top: 0.2rem;}
+    div[aria-label="Source Selector"] > label[data-checked="true"],
+    div[aria-label="Source Selector"] > label:has(input:checked) {
+        border-color: #6C63FF !important;
+        background: rgba(108, 99, 255, 0.2) !important;
+        box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25), 0 8px 24px rgba(108, 99, 255, 0.2) !important;
+        color: #ffffff !important;
+    }
 
     /* ── Run button area ────────────────────────────────────────────────── */
     .run-area {
@@ -732,34 +743,17 @@ section_header("📁", "Choose Source")
 samples = sorted(p for p in SAMPLE_DIR.glob("*") if p.suffix.lower() in MEDIA_EXTS)
 has_samples = len(samples) > 0
 
-# Source mode as styled cards
+# Source mode as interactive cards
 source_mode = None
 if has_samples:
-    src_cols = st.columns(2)
-    with src_cols[0]:
-        st.markdown(
-            '<div class="source-card active">'
-            '<div class="source-icon">📂</div>'
-            '<div class="source-label">Bundled Samples</div>'
-            '<div class="source-desc">Pre-loaded demo images & video</div></div>',
-            unsafe_allow_html=True,
-        )
-        source_mode = "Bundled sample"
-    with src_cols[1]:
-        st.markdown(
-            '<div class="source-card">'
-            '<div class="source-icon">📤</div>'
-            '<div class="source-label">Upload a File</div>'
-            '<div class="source-desc">Use your own image or video</div></div>',
-            unsafe_allow_html=True,
-        )
-        source_mode_upload = st.radio(
-            "src_pick", ["Bundled sample", "Upload a file"],
-            horizontal=True, label_visibility="collapsed",
-            index=0,
-        )
-        if source_mode_upload == "Upload a file":
-            source_mode = "Upload a file"
+    source_mode_choice = st.radio(
+        "Source Selector",
+        ["📂 Bundled Samples", "📤 Upload a File"],
+        index=0,
+        horizontal=True,
+        label_visibility="collapsed",
+    )
+    source_mode = "Bundled sample" if "Bundled" in source_mode_choice else "Upload a file"
 else:
     source_mode = "Upload a file"
 
