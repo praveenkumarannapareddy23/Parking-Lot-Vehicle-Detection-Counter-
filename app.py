@@ -34,53 +34,476 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# One dark, high-contrast design system. These values intentionally map to
-# the documented palette rather than relying on Streamlit's default theme.
+# ─── Custom CSS ─────────────────────────────────────────────────────────────── #
 st.markdown(
     """
     <style>
-    #MainMenu, footer { visibility: hidden; }
-    .stApp, [data-testid="stAppViewContainer"], [data-testid="stMain"] { background: #0B0D14; color: #C7CAD9; }
-    .block-container { padding-top: 1.5rem; padding-bottom: 2rem; max-width: 1240px; }
-    h1, h2, h3, h4, h5, h6, .stMarkdown h1, .stMarkdown h2, .stMarkdown h3 { color: #F5F6FA !important; }
-    p, label, [data-testid="stWidgetLabel"] p { color: #C7CAD9 !important; }
+    /* ── Google Fonts ───────────────────────────────────────────────────── */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-    .hero, .result-panel, .status-bar, .kpi-card { background: #151824; border: 1px solid #2A2E3E; }
-    .hero { border-radius: 16px; padding: 2rem 2.25rem; margin-bottom: 1.4rem; }
-    .hero h1 { color: #F5F6FA !important; font-size: 2rem !important; margin-bottom: .3rem !important; }
-    .hero p, .kpi-card .kpi-label, .inference-strip { color: #8B8FA3 !important; }
-    .hero .badge, .inference-strip code, [data-baseweb="tag"] {
-        background: rgba(124,127,242,.18) !important; border: 1px solid rgba(124,127,242,.35) !important;
-        color: #B4B6FF !important; border-radius: 999px;
+    /* ── Global ─────────────────────────────────────────────────────────── */
+    html, body, [class*="css"] {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
     }
-    .hero .badge { display: inline-block; padding: .25rem .7rem; margin: .6rem .35rem 0 0; }
-    .section-header { border-bottom: 2px solid #2A2E3E; margin: 1.2rem 0 .7rem; padding-bottom: .45rem; }
-    .section-header h3 { color: #F5F6FA !important; }
-    .kpi-grid { gap: .8rem; }
-    .kpi-card { border-radius: 12px; padding: 1rem; }
-    .kpi-card .kpi-value { color: #F5F6FA !important; font-weight: 750; }
-    .kpi-total .kpi-value, .kpi-default .kpi-value { color: #B4B6FF !important; }
-    .status-bar, .inference-strip { border-radius: 10px; padding: .7rem 1rem; }
-    .inference-strip { background: #1E2130; border: 1px solid #2A2E3E; }
+    #MainMenu, footer {visibility: hidden;}
+    header[data-testid="stHeader"] {
+        background: transparent !important;
+        z-index: 999999 !important;
+        pointer-events: none;
+    }
+    header[data-testid="stHeader"] * {
+        pointer-events: auto;
+    }
 
-    section[data-testid="stSidebar"], section[data-testid="stSidebar"] > div { background: #151824 !important; border-right: 1px solid #2A2E3E; }
-    [data-baseweb="select"] > div, .stTextInput input, .stNumberInput input, [data-baseweb="input"] > div, [data-testid="stFileUploaderDropzone"] {
-        background: #1E2130 !important; color: #F5F6FA !important; border-color: #2A2E3E !important;
+    /* ── Sidebar Toggle Arrow Button ────────────────────────────────────── */
+    button[data-testid="stHeaderIconButton"],
+    [data-testid="collapsedControl"],
+    [data-testid="stSidebarCollapseButton"],
+    button[aria-label*="sidebar"],
+    button[aria-label*="Sidebar"],
+    button[aria-label*="collapse"],
+    button[aria-label*="expand"] {
+        visibility: visible !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: linear-gradient(135deg, #1e1b4b 0%, #2e1065 100%) !important;
+        border: 1.5px solid rgba(108, 99, 255, 0.6) !important;
+        border-radius: 12px !important;
+        color: #c4b5fd !important;
+        padding: 6px 10px !important;
+        margin: 8px !important;
+        cursor: pointer !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 4px 15px rgba(108, 99, 255, 0.35) !important;
     }
-    [data-baseweb="select"] *, .stTextInput input, .stNumberInput input { color: #F5F6FA !important; }
-    [data-testid="stFileUploaderDropzone"] { border: 2px dashed #2A2E3E !important; }
-    [data-testid="stFileUploaderDropzone"]:hover { border-color: #7C7FF2 !important; background: rgba(124,127,242,.18) !important; }
-    .stButton > button[kind="primary"] { background: #7C7FF2 !important; color: #0B0D14 !important; border: 1px solid #7C7FF2 !important; font-weight: 700; }
-    .stButton > button[kind="primary"]:hover { background: #9497FF !important; border-color: #9497FF !important; color: #0B0D14 !important; }
-    .stButton > button:not([kind="primary"]) { background: #1E2130 !important; color: #F5F6FA !important; border: 1px solid #2A2E3E !important; }
-    .stButton > button:not([kind="primary"]):hover { border-color: #7C7FF2 !important; color: #B4B6FF !important; }
-    [data-testid="stSlider"] [role="slider"] { background: #7C7FF2 !important; }
-    [data-testid="stSlider"] div[data-baseweb="slider"] > div > div { background: #7C7FF2 !important; }
-    .stTabs [data-baseweb="tab-list"] { background: #151824; border: 1px solid #2A2E3E; border-radius: 10px; }
-    .stTabs [data-baseweb="tab"] { color: #C7CAD9 !important; }
-    .stTabs [aria-selected="true"] { background: rgba(124,127,242,.18) !important; color: #B4B6FF !important; }
-    [data-testid="stExpander"], [data-testid="stDataFrame"] { border-color: #2A2E3E !important; }
-    [data-testid="stProgress"] > div > div > div { background: #7C7FF2 !important; }
+    button[data-testid="stHeaderIconButton"]:hover,
+    [data-testid="collapsedControl"]:hover,
+    [data-testid="stSidebarCollapseButton"]:hover {
+        background: linear-gradient(135deg, #2e1065 0%, #4c1d95 100%) !important;
+        border-color: #a78bfa !important;
+        color: #ffffff !important;
+        transform: scale(1.08) !important;
+        box-shadow: 0 6px 20px rgba(108, 99, 255, 0.6) !important;
+    }
+    button[data-testid="stHeaderIconButton"] svg,
+    [data-testid="collapsedControl"] svg,
+    [data-testid="stSidebarCollapseButton"] svg {
+        fill: #c4b5fd !important;
+        color: #c4b5fd !important;
+        width: 1.4rem !important;
+        height: 1.4rem !important;
+    }
+
+    .block-container {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+        max-width: 1200px !important;
+    }
+
+    /* ── Hero banner ────────────────────────────────────────────────────── */
+    .hero {
+        background: linear-gradient(135deg, #1a1033 0%, #2d1b69 30%, #1e1145 60%, #0d1b2a 100%);
+        border-radius: 20px;
+        padding: 2.5rem 2.8rem;
+        margin-bottom: 1.8rem;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(108, 99, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(108, 99, 255, 0.15), 0 0 60px rgba(108, 99, 255, 0.05);
+    }
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: -80px; right: -60px;
+        width: 300px; height: 300px;
+        background: radial-gradient(circle, rgba(108,99,255,0.25) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: pulse-glow 4s ease-in-out infinite;
+    }
+    .hero::after {
+        content: '';
+        position: absolute;
+        bottom: -100px; left: 5%;
+        width: 250px; height: 250px;
+        background: radial-gradient(circle, rgba(0,210,255,0.15) 0%, transparent 70%);
+        border-radius: 50%;
+        animation: pulse-glow 5s ease-in-out infinite reverse;
+    }
+    @keyframes pulse-glow {
+        0%, 100% { opacity: 0.5; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.15); }
+    }
+    .hero h1 {
+        color: #ffffff !important;
+        font-size: 2.2rem !important;
+        font-weight: 800 !important;
+        margin-bottom: 0.4rem !important;
+        position: relative; z-index: 1;
+        letter-spacing: -0.02em;
+        background: linear-gradient(135deg, #ffffff 0%, #c4b5fd 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .hero p {
+        color: #a5b4c8 !important;
+        font-size: 1rem !important;
+        margin: 0 !important;
+        position: relative; z-index: 1;
+        font-weight: 400;
+    }
+    .hero .badge-row {margin-top: 1rem; position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 0.5rem;}
+    .hero .badge {
+        display: inline-block;
+        background: rgba(108,99,255,0.15);
+        border: 1px solid rgba(108,99,255,0.3);
+        border-radius: 24px;
+        padding: 0.3rem 0.9rem;
+        font-size: 0.78rem;
+        color: #c4b5fd;
+        font-weight: 500;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+    .hero .badge:hover {
+        background: rgba(108,99,255,0.3);
+        border-color: rgba(108,99,255,0.5);
+        transform: translateY(-1px);
+    }
+
+    /* ── Section headers ────────────────────────────────────────────────── */
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin: 1.5rem 0 0.8rem 0;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid rgba(108,99,255,0.25);
+    }
+    .section-header h3 {
+        margin: 0 !important;
+        font-size: 1.1rem !important;
+        color: #e8e8ec !important;
+        font-weight: 600 !important;
+    }
+    .section-icon {
+        font-size: 1.15rem;
+    }
+
+    /* ── KPI cards ──────────────────────────────────────────────────────── */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 0.9rem;
+        margin-bottom: 1.2rem;
+    }
+    .kpi-card {
+        background: rgba(26, 29, 41, 0.8);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 16px;
+        padding: 1.2rem 1.3rem;
+        text-align: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(20px);
+        position: relative;
+        overflow: hidden;
+    }
+    .kpi-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        border-radius: 16px 16px 0 0;
+    }
+    .kpi-card:hover {
+        border-color: rgba(108,99,255,0.3);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .kpi-card .kpi-value {
+        font-size: 2.2rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 0.3rem;
+    }
+    .kpi-card .kpi-label {
+        font-size: 0.75rem;
+        color: #8892a8;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 500;
+    }
+    .kpi-total .kpi-value {color: #ffffff;}
+    .kpi-total::before {background: linear-gradient(90deg, #6C63FF, #00D2FF);}
+    .kpi-car .kpi-value {color: #4ade80;}
+    .kpi-car::before {background: #4ade80;}
+    .kpi-truck .kpi-value {color: #f87171;}
+    .kpi-truck::before {background: #f87171;}
+    .kpi-bus .kpi-value {color: #60a5fa;}
+    .kpi-bus::before {background: #60a5fa;}
+    .kpi-motorcycle .kpi-value {color: #fb923c;}
+    .kpi-motorcycle::before {background: #fb923c;}
+    .kpi-default .kpi-value {color: #a78bfa;}
+    .kpi-default::before {background: #a78bfa;}
+
+    /* ── Status bar ─────────────────────────────────────────────────────── */
+    .status-bar {
+        background: rgba(26, 29, 41, 0.6);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 12px;
+        padding: 0.7rem 1.2rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.2rem;
+        margin-bottom: 1rem;
+        font-size: 0.82rem;
+        color: #a5b4c8;
+        backdrop-filter: blur(10px);
+    }
+    .status-bar .status-item {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+    .status-dot {
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 6px currentColor;
+    }
+    .dot-green {background: #4ade80; color: #4ade80;}
+    .dot-blue {background: #6C63FF; color: #6C63FF;}
+    .dot-amber {background: #fbbf24; color: #fbbf24;}
+
+    /* ── Radio button pills (Choose Source & ROI) ────────────────────────── */
+    div[data-testid="stRadio"] > div,
+    div[role="radiogroup"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 0.8rem !important;
+        width: 100% !important;
+        margin-bottom: 0.8rem !important;
+    }
+    div[data-testid="stRadio"] > div > label,
+    div[role="radiogroup"] > label {
+        flex: 1 1 auto !important;
+        min-height: 42px !important;
+        height: 42px !important;
+        background: rgba(26, 29, 41, 0.7) !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 12px !important;
+        padding: 0.45rem 1.1rem !important;
+        text-align: center !important;
+        cursor: pointer !important;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        backdrop-filter: blur(15px) !important;
+        font-weight: 600 !important;
+        font-size: 0.86rem !important;
+        color: #e8e8ec !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+        white-space: nowrap !important;
+    }
+    div[data-testid="stRadio"] > div > label:hover,
+    div[role="radiogroup"] > label:hover {
+        border-color: rgba(108, 99, 255, 0.5) !important;
+        background: rgba(108, 99, 255, 0.12) !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 16px rgba(108, 99, 255, 0.15) !important;
+    }
+    div[data-testid="stRadio"] > div > label[data-checked="true"],
+    div[role="radiogroup"] > label[data-checked="true"],
+    div[data-testid="stRadio"] > div > label:has(input:checked),
+    div[role="radiogroup"] > label:has(input:checked) {
+        border-color: #6C63FF !important;
+        background: rgba(108, 99, 255, 0.22) !important;
+        box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.3), 0 4px 16px rgba(108, 99, 255, 0.25) !important;
+        color: #ffffff !important;
+    }
+
+    /* ── Styled Section Cards / Panels (st.container(border=True)) ──────── */
+    [data-testid="stVerticalBlockBorderWrapper"] {
+        background: rgba(26, 29, 41, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 18px !important;
+        padding: 1.4rem 1.6rem;
+        margin-bottom: 0.75rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(20px);
+    }
+
+    /* ── Run button area ────────────────────────────────────────────────── */
+    .run-area {
+        background: rgba(108,99,255,0.08);
+        border: 1px solid rgba(108,99,255,0.2);
+        border-radius: 14px;
+        padding: 1.1rem 1.3rem;
+        margin: 0.8rem 0;
+    }
+
+    /* ── Sidebar styling ────────────────────────────────────────────────── */
+    section[data-testid="stSidebar"] {
+        background: #12141e !important;
+        border-right: 1px solid rgba(255,255,255,0.05);
+    }
+    section[data-testid="stSidebar"] .stMarkdown h3 {
+        color: #c4b5fd !important;
+        font-size: 0.85rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        border-bottom: 2px solid rgba(108,99,255,0.25);
+        padding-bottom: 0.4rem;
+        font-weight: 600;
+    }
+
+    /* ── Inference info strip ───────────────────────────────────────────── */
+    .inference-strip {
+        background: rgba(26, 29, 41, 0.6);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 10px;
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+        color: #8892a8;
+        margin-top: 0.6rem;
+    }
+    .inference-strip code {
+        background: rgba(108,99,255,0.15);
+        color: #c4b5fd;
+        padding: 0.15rem 0.4rem;
+        border-radius: 5px;
+        font-size: 0.78rem;
+        font-weight: 500;
+    }
+
+    /* ── Divider ────────────────────────────────────────────────────────── */
+    .soft-divider {
+        border: none;
+        border-top: 1px solid rgba(255,255,255,0.06);
+        margin: 1.2rem 0;
+    }
+
+    /* ── Streamlit metrics override ─────────────────────────────────────── */
+    [data-testid="stMetric"] {
+        background: rgba(26, 29, 41, 0.6);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 14px;
+        padding: 1rem 1.2rem;
+        backdrop-filter: blur(10px);
+    }
+    [data-testid="stMetric"] label {
+        font-size: 0.78rem !important;
+        color: #8892a8 !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 500;
+    }
+    [data-testid="stMetric"] [data-testid="stMetricValue"] {
+        font-size: 1.8rem !important;
+        font-weight: 700 !important;
+        color: #e8e8ec !important;
+    }
+
+    /* ── Tab styling ────────────────────────────────────────────────────── */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 0;
+        background: rgba(26, 29, 41, 0.6);
+        border-radius: 12px;
+        padding: 5px;
+        border: 1px solid rgba(255,255,255,0.06);
+    }
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 9px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    .stTabs [aria-selected="true"] {
+        background: rgba(108,99,255,0.2) !important;
+    }
+
+    /* ── Buttons ─────────────────────────────────────────────────────────── */
+    .stButton > button[kind="primary"] {
+        background: linear-gradient(135deg, #6C63FF 0%, #5A52D5 100%) !important;
+        border: none !important;
+        border-radius: 12px !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.02em;
+        box-shadow: 0 4px 14px rgba(108,99,255,0.35) !important;
+        transition: all 0.3s ease !important;
+    }
+    .stButton > button[kind="primary"]:hover {
+        box-shadow: 0 6px 20px rgba(108,99,255,0.5) !important;
+        transform: translateY(-1px);
+    }
+    .stButton > button:not([kind="primary"]) {
+        background: rgba(255,255,255,0.05) !important;
+        border: 1px solid rgba(255,255,255,0.12) !important;
+        border-radius: 10px !important;
+        color: #c4b5fd !important;
+        transition: all 0.2s ease !important;
+    }
+    .stButton > button:not([kind="primary"]):hover {
+        background: rgba(108,99,255,0.1) !important;
+        border-color: rgba(108,99,255,0.3) !important;
+    }
+
+    /* ── Expanders ───────────────────────────────────────────────────────── */
+    .streamlit-expanderHeader {
+        background: rgba(26, 29, 41, 0.4) !important;
+        border-radius: 10px !important;
+        font-weight: 500 !important;
+        color: #e8e8ec !important;
+    }
+
+    /* ── Selectbox / Inputs ──────────────────────────────────────────────── */
+    .stSelectbox > div > div,
+    .stTextInput > div > div > input,
+    .stNumberInput > div > div > input {
+        background: rgba(26, 29, 41, 0.6) !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        border-radius: 10px !important;
+        color: #e8e8ec !important;
+    }
+
+    /* ── Radio buttons ──────────────────────────────────────────────────── */
+    .stRadio > div {
+        gap: 0.3rem;
+    }
+
+    /* ── File uploader ──────────────────────────────────────────────────── */
+    .stFileUploader > div {
+        border: 2px dashed rgba(108,99,255,0.3) !important;
+        border-radius: 14px !important;
+        background: rgba(108,99,255,0.04) !important;
+    }
+    .stFileUploader > div:hover {
+        border-color: rgba(108,99,255,0.5) !important;
+        background: rgba(108,99,255,0.08) !important;
+    }
+
+    /* ── Scrollbar ───────────────────────────────────────────────────────── */
+    ::-webkit-scrollbar {width: 6px;}
+    ::-webkit-scrollbar-track {background: transparent;}
+    ::-webkit-scrollbar-thumb {
+        background: rgba(108,99,255,0.3);
+        border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {background: rgba(108,99,255,0.5);}
+
+    /* ── Data frames ────────────────────────────────────────────────────── */
+    .stDataFrame {
+        border: 1px solid rgba(255,255,255,0.06) !important;
+        border-radius: 12px !important;
+        overflow: hidden;
+    }
+
+    /* ── Progress bar ───────────────────────────────────────────────────── */
+    .stProgress > div > div > div {
+        background: linear-gradient(90deg, #6C63FF, #00D2FF) !important;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -92,7 +515,7 @@ ROI_DIR = ROOT / "data" / "roi"
 OUTPUT_DIR = ROOT / "outputs" / "ui"
 MODELS = ["yolo11n.pt", "yolo11s.pt", "yolo11m.pt", "yolov8n.pt", "yolov8s.pt"]
 MEDIA_EXTS = config.IMAGE_EXTS | config.VIDEO_EXTS
-LINE_COLOR = "#7C7FF2"
+LINE_COLOR = "#6C63FF"
 DRAW_WIDTH = 900
 
 # Auto-download demo sample files if not present (for Streamlit Cloud deployments)
@@ -185,18 +608,18 @@ with st.sidebar:
         '<div style="text-align:center; padding: 0.8rem 0 0.5rem 0;">'
         '<span style="font-size:2rem;">🚗</span>'
         '<h2 style="margin:0.2rem 0 0 0; font-size:1.15rem; '
-        'color:#F5F6FA; '
+        'background: linear-gradient(135deg, #c4b5fd, #6C63FF); '
         '-webkit-background-clip: text; -webkit-text-fill-color: transparent; '
         'font-weight:700;">Vehicle Counter</h2>'
         '</div>',
         unsafe_allow_html=True,
     )
-    st.markdown('<hr style="border:none; border-top:1px solid #2A2E3E; margin:0.3rem 0 0.8rem 0;">', unsafe_allow_html=True)
+    st.markdown('<hr style="border:none; border-top:1px solid rgba(255,255,255,0.08); margin:0.3rem 0 0.8rem 0;">', unsafe_allow_html=True)
 
     # ── Model ──────────────────────────────────────────────────────────── #
     st.markdown(
         '<p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; '
-        'color:#8B8FA3; font-weight:700; margin-bottom:0.3rem;">🤖 Model</p>',
+        'color:#8892a8; font-weight:600; margin-bottom:0.3rem;">🤖 Model</p>',
         unsafe_allow_html=True,
     )
     model_name = st.selectbox(
@@ -208,7 +631,7 @@ with st.sidebar:
     # ── Device ─────────────────────────────────────────────────────────── #
     st.markdown(
         '<p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; '
-        'color:#8B8FA3; font-weight:700; margin-bottom:0.3rem;">💻 Device</p>',
+        'color:#8892a8; font-weight:600; margin-bottom:0.3rem;">💻 Device</p>',
         unsafe_allow_html=True,
     )
     device = st.selectbox(
@@ -216,12 +639,12 @@ with st.sidebar:
         label_visibility="collapsed",
     )
 
-    st.markdown('<hr style="border:none; border-top:1px solid #2A2E3E; margin:0.6rem 0;">', unsafe_allow_html=True)
+    st.markdown('<hr style="border:none; border-top:1px solid rgba(255,255,255,0.08); margin:0.6rem 0;">', unsafe_allow_html=True)
 
     # ── Detection Settings ─────────────────────────────────────────────── #
     st.markdown(
         '<p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; '
-        'color:#8B8FA3; font-weight:700; margin-bottom:0.3rem;">🎯 Detection</p>',
+        'color:#8892a8; font-weight:600; margin-bottom:0.3rem;">🎯 Detection</p>',
         unsafe_allow_html=True,
     )
     conf = st.slider(
@@ -242,12 +665,12 @@ with st.sidebar:
             "Inference size", [640, 960, 1280, 1600, 1920], value=1280,
         )
 
-    st.markdown('<hr style="border:none; border-top:1px solid #2A2E3E; margin:0.6rem 0;">', unsafe_allow_html=True)
+    st.markdown('<hr style="border:none; border-top:1px solid rgba(255,255,255,0.08); margin:0.6rem 0;">', unsafe_allow_html=True)
 
     # ── Classes ────────────────────────────────────────────────────────── #
     st.markdown(
         '<p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; '
-        'color:#8B8FA3; font-weight:700; margin-bottom:0.3rem;">🏷️ Classes</p>',
+        'color:#8892a8; font-weight:600; margin-bottom:0.3rem;">🏷️ Classes</p>',
         unsafe_allow_html=True,
     )
     class_names = st.multiselect(
@@ -260,12 +683,12 @@ with st.sidebar:
         help="auto shrinks text to fit boxes.",
     )
 
-    st.markdown('<hr style="border:none; border-top:1px solid #2A2E3E; margin:0.6rem 0;">', unsafe_allow_html=True)
+    st.markdown('<hr style="border:none; border-top:1px solid rgba(255,255,255,0.08); margin:0.6rem 0;">', unsafe_allow_html=True)
 
     # ── Video ──────────────────────────────────────────────────────────── #
     st.markdown(
         '<p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; '
-        'color:#8B8FA3; font-weight:700; margin-bottom:0.3rem;">🎬 Video</p>',
+        'color:#8892a8; font-weight:600; margin-bottom:0.3rem;">🎬 Video</p>',
         unsafe_allow_html=True,
     )
     use_tracking = st.checkbox("Track vehicles between frames", value=True)
@@ -404,7 +827,7 @@ with st.container(border=True):
             points.clear()
             st.rerun()
         btn_c3.markdown(
-            f'<div style="padding-top:0.5rem; color:#8B8FA3; font-size:0.85rem;">'
+            f'<div style="padding-top:0.5rem; color:#64748b; font-size:0.85rem;">'
             f'<strong>{len(points)}</strong> point(s)'
             f'{" ✅" if len(points) >= 3 else " — need 3 minimum"}</div>',
             unsafe_allow_html=True,
@@ -446,8 +869,8 @@ with st.container(border=True):
     if roi is not None:
         roi_info_c1, roi_info_c2 = st.columns([3, 2])
         roi_info_c1.markdown(
-            f'<div style="background:rgba(124,127,242,0.18); border:1px solid #2A2E3E; border-radius:8px; padding:0.5rem 0.8rem; '
-            f'font-size:0.85rem; color:#B4B6FF;">'
+            f'<div style="background:#eff6ff; border-radius:8px; padding:0.5rem 0.8rem; '
+            f'font-size:0.85rem; color:#1e40af;">'
             f'📌 <strong>{roi.name}</strong> — {len(roi.points)} points</div>',
             unsafe_allow_html=True,
         )
