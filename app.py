@@ -345,19 +345,45 @@ st.markdown(
         margin: 0.8rem 0;
     }
 
-    /* ── Sidebar styling ────────────────────────────────────────────────── */
+    /* ── Sidebar styling (White background & Expanded width) ──────────────── */
     section[data-testid="stSidebar"] {
-        background: #12141e !important;
-        border-right: 1px solid rgba(255,255,255,0.05);
+        width: 360px !important;
+        min-width: 360px !important;
+        background-color: #ffffff !important;
+        border-right: 1px solid #e2e8f0 !important;
+        box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04) !important;
+    }
+    section[data-testid="stSidebar"] [data-testid="stSidebarUserContent"] {
+        padding: 1.5rem 1.2rem !important;
+        background-color: #ffffff !important;
+    }
+    section[data-testid="stSidebar"] p,
+    section[data-testid="stSidebar"] span,
+    section[data-testid="stSidebar"] label,
+    section[data-testid="stSidebar"] div {
+        color: #334155 !important;
     }
     section[data-testid="stSidebar"] .stMarkdown h3 {
-        color: #c4b5fd !important;
+        color: #6C63FF !important;
         font-size: 0.85rem !important;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        border-bottom: 2px solid rgba(108,99,255,0.25);
+        border-bottom: 2px solid rgba(108,99,255,0.2);
         padding-bottom: 0.4rem;
-        font-weight: 600;
+        font-weight: 700;
+    }
+    section[data-testid="stSidebar"] .stSelectbox > div > div,
+    section[data-testid="stSidebar"] .stNumberInput input,
+    section[data-testid="stSidebar"] .stMultiSelect > div {
+        background: #f8fafc !important;
+        border: 1px solid #cbd5e1 !important;
+        color: #1e293b !important;
+        border-radius: 10px !important;
+    }
+    section[data-testid="stSidebar"] .stMultiSelect span[data-baseweb="tag"] {
+        background: rgba(108,99,255,0.15) !important;
+        border: 1px solid rgba(108,99,255,0.3) !important;
+        color: #4338ca !important;
     }
 
     /* ── Inference info strip ───────────────────────────────────────────── */
@@ -608,18 +634,18 @@ with st.sidebar:
         '<div style="text-align:center; padding: 0.8rem 0 0.5rem 0;">'
         '<span style="font-size:2rem;">🚗</span>'
         '<h2 style="margin:0.2rem 0 0 0; font-size:1.15rem; '
-        'background: linear-gradient(135deg, #c4b5fd, #6C63FF); '
+        'background: linear-gradient(135deg, #4338ca, #6C63FF); '
         '-webkit-background-clip: text; -webkit-text-fill-color: transparent; '
         'font-weight:700;">Vehicle Counter</h2>'
         '</div>',
         unsafe_allow_html=True,
     )
-    st.markdown('<hr style="border:none; border-top:1px solid rgba(255,255,255,0.08); margin:0.3rem 0 0.8rem 0;">', unsafe_allow_html=True)
+    st.markdown('<hr style="border:none; border-top:1px solid #e2e8f0; margin:0.3rem 0 0.8rem 0;">', unsafe_allow_html=True)
 
     # ── Model ──────────────────────────────────────────────────────────── #
     st.markdown(
         '<p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; '
-        'color:#8892a8; font-weight:600; margin-bottom:0.3rem;">🤖 Model</p>',
+        'color:#475569; font-weight:700; margin-bottom:0.3rem;">🤖 Model</p>',
         unsafe_allow_html=True,
     )
     model_name = st.selectbox(
@@ -631,7 +657,7 @@ with st.sidebar:
     # ── Device ─────────────────────────────────────────────────────────── #
     st.markdown(
         '<p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; '
-        'color:#8892a8; font-weight:600; margin-bottom:0.3rem;">💻 Device</p>',
+        'color:#475569; font-weight:700; margin-bottom:0.3rem;">💻 Device</p>',
         unsafe_allow_html=True,
     )
     device = st.selectbox(
@@ -639,12 +665,12 @@ with st.sidebar:
         label_visibility="collapsed",
     )
 
-    st.markdown('<hr style="border:none; border-top:1px solid rgba(255,255,255,0.08); margin:0.6rem 0;">', unsafe_allow_html=True)
+    st.markdown('<hr style="border:none; border-top:1px solid #e2e8f0; margin:0.6rem 0;">', unsafe_allow_html=True)
 
     # ── Detection Settings ─────────────────────────────────────────────── #
     st.markdown(
         '<p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; '
-        'color:#8892a8; font-weight:600; margin-bottom:0.3rem;">🎯 Detection</p>',
+        'color:#475569; font-weight:700; margin-bottom:0.3rem;">🎯 Detection</p>',
         unsafe_allow_html=True,
     )
     conf = st.slider(
@@ -665,12 +691,12 @@ with st.sidebar:
             "Inference size", [640, 960, 1280, 1600, 1920], value=1280,
         )
 
-    st.markdown('<hr style="border:none; border-top:1px solid rgba(255,255,255,0.08); margin:0.6rem 0;">', unsafe_allow_html=True)
+    st.markdown('<hr style="border:none; border-top:1px solid #e2e8f0; margin:0.6rem 0;">', unsafe_allow_html=True)
 
     # ── Classes ────────────────────────────────────────────────────────── #
     st.markdown(
         '<p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; '
-        'color:#8892a8; font-weight:600; margin-bottom:0.3rem;">🏷️ Classes</p>',
+        'color:#475569; font-weight:700; margin-bottom:0.3rem;">🏷️ Classes</p>',
         unsafe_allow_html=True,
     )
     class_names = st.multiselect(
@@ -683,12 +709,12 @@ with st.sidebar:
         help="auto shrinks text to fit boxes.",
     )
 
-    st.markdown('<hr style="border:none; border-top:1px solid rgba(255,255,255,0.08); margin:0.6rem 0;">', unsafe_allow_html=True)
+    st.markdown('<hr style="border:none; border-top:1px solid #e2e8f0; margin:0.6rem 0;">', unsafe_allow_html=True)
 
     # ── Video ──────────────────────────────────────────────────────────── #
     st.markdown(
         '<p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; '
-        'color:#8892a8; font-weight:600; margin-bottom:0.3rem;">🎬 Video</p>',
+        'color:#475569; font-weight:700; margin-bottom:0.3rem;">🎬 Video</p>',
         unsafe_allow_html=True,
     )
     use_tracking = st.checkbox("Track vehicles between frames", value=True)
