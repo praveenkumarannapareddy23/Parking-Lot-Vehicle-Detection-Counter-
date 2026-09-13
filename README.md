@@ -77,7 +77,7 @@ The Parking Lot and Traffic Vehicle Counter is a computer vision application bui
                     │ • Rendered Media (JPG / MP4)  │
                     │ • Summary JSON & Per-frame CSV│
                     │ • Streamlit Interactive UI    │
-                    └───────────────┘
+                    └───────────────────────────────┘
 ```
 
 Component Overview:
@@ -112,30 +112,6 @@ Component Overview:
 - Auto-Resolution Scaling: Automatically matches inference size to input resolution to catch small distant cars.
 - Dual Interfaces: Fast command line interface for scripts plus an easy Streamlit web dashboard.
 - Multiple Export Formats: Generates annotated pictures/videos, JSON summary files, and CSV per-frame logs.
-
-## Table of Contents
-
-- [Description](#description)
-  - [Project Guide Questions](#project-guide-questions)
-- [Architecture of the Application](#architecture-of-the-application)
-- [Tech Stack](#tech-stack)
-- [Key Features](#key-features)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Backend Setup](#backend-setup)
-  - [Frontend Setup](#frontend-setup)
-- [Usage](#usage)
-  - [Image Detection](#image-detection)
-  - [Video Tracking and Counting](#video-tracking-and-counting)
-  - [Region of Interest Filtering](#region-of-interest-roi-filtering)
-  - [Interactive Web UI](#interactive-web-ui)
-  - [Command Reference](#command-reference)
-- [Project Structure](#project-structure)
-- [Features](#features)
-- [How to Contribute](#how-to-contribute)
-- [Tests](#tests)
-- [Credits](#credits)
-- [License](#license)
 
 ## Getting Started
 
