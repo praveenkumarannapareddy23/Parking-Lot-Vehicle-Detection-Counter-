@@ -945,8 +945,6 @@ st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ─── Run Button ─────────────────────────────────────────────────────────────── #
-st.markdown('<hr class="soft-divider">', unsafe_allow_html=True)
-
 run_c1, run_c2, run_c3 = st.columns([2, 2, 6])
 with run_c1:
     run_btn = st.button("▶  Run Detection", type="primary", width="stretch")
