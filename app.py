@@ -276,38 +276,37 @@ st.markdown(
     .dot-blue {background: #6C63FF; color: #6C63FF;}
     .dot-amber {background: #fbbf24; color: #fbbf24;}
 
-    /* ── Source picker radio buttons (Compact side-by-side cards) ────────── */
+    /* ── Radio button pills (Choose Source & ROI) ────────────────────────── */
     div[data-testid="stRadio"] > div,
     div[role="radiogroup"] {
         display: flex !important;
         flex-direction: row !important;
+        flex-wrap: wrap !important;
         gap: 0.8rem !important;
         width: 100% !important;
-        max-width: 520px !important;
-        margin-bottom: 0.6rem !important;
+        margin-bottom: 0.8rem !important;
     }
     div[data-testid="stRadio"] > div > label,
     div[role="radiogroup"] > label {
-        flex: 1 1 50% !important;
-        width: 50% !important;
-        min-width: 0 !important;
-        min-height: 44px !important;
-        height: 44px !important;
+        flex: 1 1 auto !important;
+        min-height: 42px !important;
+        height: 42px !important;
         background: rgba(26, 29, 41, 0.7) !important;
         border: 1.5px solid rgba(255, 255, 255, 0.08) !important;
         border-radius: 12px !important;
-        padding: 0.5rem 0.9rem !important;
+        padding: 0.45rem 1.1rem !important;
         text-align: center !important;
         cursor: pointer !important;
         transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
         backdrop-filter: blur(15px) !important;
         font-weight: 600 !important;
-        font-size: 0.85rem !important;
+        font-size: 0.86rem !important;
         color: #e8e8ec !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         box-sizing: border-box !important;
+        white-space: nowrap !important;
     }
     div[data-testid="stRadio"] > div > label:hover,
     div[role="radiogroup"] > label:hover {
@@ -324,6 +323,17 @@ st.markdown(
         background: rgba(108, 99, 255, 0.22) !important;
         box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.3), 0 4px 16px rgba(108, 99, 255, 0.25) !important;
         color: #ffffff !important;
+    }
+
+    /* ── Styled Section Cards / Panels ─────────────────────────────────── */
+    .glass-card-panel {
+        background: rgba(26, 29, 41, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        padding: 1.4rem 1.6rem;
+        margin-bottom: 1.4rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(20px);
     }
 
     /* ── Run button area ────────────────────────────────────────────────── */
@@ -759,6 +769,7 @@ st.markdown(
 
 
 # ─── Source Selection ───────────────────────────────────────────────────────── #
+st.markdown('<div class="glass-card-panel">', unsafe_allow_html=True)
 section_header("📁", "Choose Source")
 
 samples = sorted(p for p in SAMPLE_DIR.glob("*") if p.suffix.lower() in MEDIA_EXTS)
@@ -769,7 +780,7 @@ source_mode = None
 if has_samples:
     source_mode_choice = st.radio(
         "Source Selector",
-        ["📂 Bundled Samples", "📤 Upload a File"],
+        ["📁 Bundled Samples", "📤 Upload a File"],
         index=0,
         horizontal=True,
         label_visibility="collapsed",
@@ -794,14 +805,15 @@ else:
         source_path = workdir / uploaded.name
         source_path.write_bytes(uploaded.getbuffer())
 
+st.markdown('</div>', unsafe_allow_html=True)
+
 if source_path is None:
     st.markdown(
-        '<div style="text-align:center; padding:2.5rem; background:#f8fafc; '
-        'border-radius:12px; border:2px dashed #cbd5e1;">'
+        '<div style="text-align:center; padding:2.5rem; background:rgba(26,29,41,0.6); '
+        'border-radius:16px; border:2px dashed rgba(108,99,255,0.3); backdrop-filter:blur(20px);">'
         '<div style="font-size:2.5rem; margin-bottom:0.5rem;">🖼️</div>'
-        '<p style="color:#64748b; margin:0;">Select a bundled sample or upload a file to begin</p>'
-        '<p style="color:#94a3b8; font-size:0.8rem; margin:0.3rem 0 0 0;">'
-        'Run <code>python tools/fetch_samples.py</code> to download demo media</p></div>',
+        '<p style="color:#a5b4c8; margin:0;">Select a bundled sample or upload a file to begin</p>'
+        '</div>',
         unsafe_allow_html=True,
     )
     st.stop()
@@ -819,6 +831,7 @@ height, width = preview.shape[:2]
 
 
 # ─── Region of Interest ─────────────────────────────────────────────────────── #
+st.markdown('<div class="glass-card-panel">', unsafe_allow_html=True)
 section_header("📐", "Region of Interest")
 
 roi_files = sorted(ROI_DIR.glob("*.json"))
@@ -927,6 +940,8 @@ if roi_mode != "Draw polygon":
                 + ("" if roi is None else f" — ROI '{roi.name}' shaded"),
         width="stretch",
     )
+
+st.markdown('</div>', unsafe_allow_html=True)
 
 
 # ─── Run Button ─────────────────────────────────────────────────────────────── #
