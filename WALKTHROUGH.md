@@ -60,7 +60,7 @@ The application processes images or video streams through a 5-step pipeline:
 
 Explanation of the 5 Steps:
 1. Input Reading: OpenCV reads the image or video frame.
-2. AI Detection: The YOLO11 pre-trained vision model finds bounding box coordinates for vehicles.
+2. AI Detection (`yolo11m` Model): We use the **`yolo11m.pt` (YOLO11 Medium)** model because it provides the best detection accuracy and vehicle precision in complex parking environments.
 3. Vehicle Tracking: The ByteTrack multi-object tracker follows each vehicle from frame to frame. This prevents counting the same parked car multiple times in every frame.
 4. Region of Interest (ROI): If an ROI polygon zone is drawn or specified, only vehicles whose bottom tires touch inside the drawn zone are counted.
 5. Output Generation: The system draws color-coded bounding boxes, outputs a JSON summary file, generates frame-by-frame CSV reports, and displays real-time counts in the Streamlit web dashboard.
