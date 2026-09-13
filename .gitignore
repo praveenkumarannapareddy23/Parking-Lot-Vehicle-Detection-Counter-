@@ -1,0 +1,58 @@
+# ── Virtual Environments ──
+.venv/
+venv/
+ENV/
+env/
+
+# ── Python Cache & Build Artifacts ──
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ── Model Weights (Downloaded automatically on first use) ──
+*.pt
+*.onnx
+*.engine
+*.tflite
+
+# ── Application Output Directory ──
+outputs/
+
+# ── Sample Data Ingest (Fetched dynamically via tools/fetch_samples.py) ──
+data/input/*
+!data/input/.gitkeep
+!data/input/SOURCES.md
+
+# ── IDEs & System Files ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ── Logs & Scratch Files ──
+*.log
+scratch/
+.tempmediaStorage/

@@ -1,0 +1,16 @@
+# ── Core Computer Vision & AI Detection ──
+ultralytics>=8.3.0          # Pre-trained YOLO11 models & ByteTrack multi-object tracker
+lapx>=0.5.12                # Linear assignment solver required by ByteTrack tracker
+opencv-python>=4.10.0       # Image & video decoding, rendering bounding boxes, ROI math
+torch>=2.2.0                # PyTorch deep learning inference engine
+torchvision>=0.17.0         # Computer vision utilities for PyTorch
+
+# ── Frontend Web Dashboard & User Interface ──
+streamlit>=1.49.0           # Interactive web application framework
+streamlit-image-coordinates>=0.4.1   # Interactive point-and-click polygon ROI drawing tool
+
+# ── Data Processing, Analytics & CLI Utilities ──
+pandas>=2.0.0               # Dataframes for detection tables & CSV report generation
+numpy>=1.26.0               # Numerical computations & array manipulation
+tqdm>=4.66.0                # Command-line progress bars during video processing
+pillow>=10.0.0              # Image manipulation & format conversion
