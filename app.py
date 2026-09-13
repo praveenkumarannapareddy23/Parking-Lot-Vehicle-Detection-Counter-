@@ -276,15 +276,21 @@ st.markdown(
     .dot-blue {background: #6C63FF; color: #6C63FF;}
     .dot-amber {background: #fbbf24; color: #fbbf24;}
 
-    /* ── Source picker radio cards ───────────────────────────────────────── */
-    div[aria-label="Source Selector"] {
+    /* ── Source picker radio cards (Equal size 50% / 50%) ───────────────── */
+    div[data-testid="stRadio"] > div,
+    div[role="radiogroup"] {
         display: flex !important;
+        flex-direction: row !important;
         gap: 1.2rem !important;
         width: 100% !important;
         margin-bottom: 0.8rem !important;
     }
-    div[aria-label="Source Selector"] > label {
-        flex: 1 !important;
+    div[data-testid="stRadio"] > div > label,
+    div[role="radiogroup"] > label {
+        flex: 1 1 50% !important;
+        width: 50% !important;
+        min-width: 0 !important;
+        min-height: 85px !important;
         background: rgba(26, 29, 41, 0.7) !important;
         border: 2px solid rgba(255, 255, 255, 0.08) !important;
         border-radius: 16px !important;
@@ -294,19 +300,24 @@ st.markdown(
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         backdrop-filter: blur(20px) !important;
         font-weight: 600 !important;
+        font-size: 1rem !important;
         color: #e8e8ec !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        box-sizing: border-box !important;
     }
-    div[aria-label="Source Selector"] > label:hover {
+    div[data-testid="stRadio"] > div > label:hover,
+    div[role="radiogroup"] > label:hover {
         border-color: rgba(108, 99, 255, 0.5) !important;
         background: rgba(108, 99, 255, 0.1) !important;
         transform: translateY(-2px) !important;
         box-shadow: 0 8px 24px rgba(108, 99, 255, 0.15) !important;
     }
-    div[aria-label="Source Selector"] > label[data-checked="true"],
-    div[aria-label="Source Selector"] > label:has(input:checked) {
+    div[data-testid="stRadio"] > div > label[data-checked="true"],
+    div[role="radiogroup"] > label[data-checked="true"],
+    div[data-testid="stRadio"] > div > label:has(input:checked),
+    div[role="radiogroup"] > label:has(input:checked) {
         border-color: #6C63FF !important;
         background: rgba(108, 99, 255, 0.2) !important;
         box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25), 0 8px 24px rgba(108, 99, 255, 0.2) !important;
