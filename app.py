@@ -276,49 +276,39 @@ st.markdown(
     .dot-blue {background: #6C63FF; color: #6C63FF;}
     .dot-amber {background: #fbbf24; color: #fbbf24;}
 
-    /* ── Modern Radio Card & Pill Buttons (Hides raw radio dots) ─────── */
-    div[data-testid="stRadio"] input[type="radio"] {
-        display: none !important;
-    }
-    div[data-testid="stRadio"] [data-baseweb="radio"] > div:first-child {
-        display: none !important;
-    }
-    div[data-testid="stRadio"] div[role="radiogroup"] {
+    /* ── Source picker radio cards ───────────────────────────────────────── */
+    div[aria-label="Source Selector"] {
         display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: wrap !important;
-        gap: 0.8rem !important;
+        gap: 1.2rem !important;
         width: 100% !important;
+        margin-bottom: 0.8rem !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] > label {
+    div[aria-label="Source Selector"] > label {
         flex: 1 !important;
-        min-width: 140px !important;
         background: rgba(26, 29, 41, 0.7) !important;
         border: 2px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 14px !important;
-        padding: 0.9rem 1.2rem !important;
+        border-radius: 16px !important;
+        padding: 1.2rem 1.5rem !important;
         text-align: center !important;
         cursor: pointer !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         backdrop-filter: blur(20px) !important;
         font-weight: 600 !important;
-        color: #a5b4c8 !important;
+        color: #e8e8ec !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        margin: 0 !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] > label:hover {
+    div[aria-label="Source Selector"] > label:hover {
         border-color: rgba(108, 99, 255, 0.5) !important;
         background: rgba(108, 99, 255, 0.1) !important;
-        color: #ffffff !important;
         transform: translateY(-2px) !important;
         box-shadow: 0 8px 24px rgba(108, 99, 255, 0.15) !important;
     }
-    div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked),
-    div[data-testid="stRadio"] div[role="radiogroup"] > label[data-checked="true"] {
+    div[aria-label="Source Selector"] > label[data-checked="true"],
+    div[aria-label="Source Selector"] > label:has(input:checked) {
         border-color: #6C63FF !important;
-        background: rgba(108, 99, 255, 0.22) !important;
+        background: rgba(108, 99, 255, 0.2) !important;
         box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25), 0 8px 24px rgba(108, 99, 255, 0.2) !important;
         color: #ffffff !important;
     }
@@ -549,6 +539,14 @@ MODELS = ["yolo11n.pt", "yolo11s.pt", "yolo11m.pt", "yolov8n.pt", "yolov8s.pt"]
 MEDIA_EXTS = config.IMAGE_EXTS | config.VIDEO_EXTS
 LINE_COLOR = "#6C63FF"
 DRAW_WIDTH = 900
+
+# Auto-download demo sample files if not present (for Streamlit Cloud deployments)
+if not (SAMPLE_DIR.exists() and any(p.suffix.lower() in MEDIA_EXTS for p in SAMPLE_DIR.glob("*"))):
+    try:
+        import subprocess
+        subprocess.run(["python", str(ROOT / "tools" / "fetch_samples.py")], check=False)
+    except Exception:
+        pass
 
 # Map class names → CSS color classes for KPI cards
 CLASS_KPI_MAP = {

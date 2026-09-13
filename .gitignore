@@ -38,8 +38,11 @@ htmlcov/
 # ── Application Output Directory ──
 outputs/
 
-# ── Sample Data Ingest (Fetched dynamically via tools/fetch_samples.py) ──
-data/input/*
+# ── Sample Data Ingest (Track sample media in git repo) ──
+!data/input/*.jpg
+!data/input/*.jpeg
+!data/input/*.png
+!data/input/*.mp4
 !data/input/.gitkeep
 !data/input/SOURCES.md
 
