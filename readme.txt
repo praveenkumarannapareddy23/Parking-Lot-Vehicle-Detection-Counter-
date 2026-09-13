@@ -8,8 +8,11 @@
 
 An easy-to-use computer vision system to detect, track, and count vehicles (cars, motorcycles, buses, and trucks) in parking lot images and video feeds using pre-trained YOLO11 with zero model training required.
 
-![Annotated Parking Lot](examples/parking_lot_annotated.jpg)
-101 vehicles detected in the sample lot at native resolution. Bounding boxes are color-coded per vehicle class with confidence scores.
+![Annotated Parking Lot UI Output](outputs/ui/parking_lot_annotated.jpg)
+*101 vehicles detected (96 cars, 4 trucks, 1 bus) in sample lot via Streamlit UI output (`outputs/ui/parking_lot_annotated.jpg`). Bounding boxes are color-coded per vehicle class with confidence scores.*
+
+![Annotated UI Output - imagepra](outputs/ui/imagepra_annotated.jpg)
+*Streamlit UI Annotated Output (`outputs/ui/imagepra_annotated.jpg`): 98 total vehicles detected (79 cars, 17 motorcycles, 1 bus, 1 truck) at 3000×2001 resolution.*
 
 ## Description
 
@@ -251,6 +254,14 @@ Web UI capabilities:
 - Inspect detection tables with coordinates and confidence ratings.
 - Download annotated media, JSON summaries, and CSV reports.
 
+#### Sample Streamlit Web UI Outputs (`outputs/ui/`)
+
+![Annotated Parking Lot UI Output](outputs/ui/parking_lot_annotated.jpg)
+*Annotated UI Output (`outputs/ui/parking_lot_annotated.jpg`): Interactive Streamlit web dashboard detection result showing 101 total vehicles detected (96 cars, 4 trucks, 1 bus) with color-coded bounding boxes and real-time HUD summary.*
+
+![Annotated Street Scene UI Output](outputs/ui/imagepra_annotated.jpg)
+*Annotated UI Output (`outputs/ui/imagepra_annotated.jpg`): Interactive Streamlit web dashboard detection output featuring 98 total vehicles detected (79 cars, 17 motorcycles, 1 bus, 1 truck) at 3000×2001 resolution.*
+
 ### Command Reference
 
 | Flag | Default | Description |
@@ -304,10 +315,12 @@ vehicle-counter/
 ├── examples/                 # Committed sample output results
 │   ├── parking_lot_annotated.jpg
 │   ├── parking_lot_roi_annotated.jpg
+│   ├── imagepra_annotated.jpg
 │   ├── street_traffic_annotated.mp4
 │   └── street_traffic_per_frame.csv
 │
 └── outputs/                  # Processing output directory (Images, Videos, JSON/CSV)
+    └── ui/                   # Streamlit Web UI outputs (parking_lot_annotated.jpg, imagepra_annotated.jpg)
 ```
 
 ## Features
