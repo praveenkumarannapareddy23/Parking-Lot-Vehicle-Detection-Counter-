@@ -8,7 +8,7 @@
 
 An easy-to-use computer vision system to detect, track, and count vehicles (cars, motorcycles, buses, and trucks) in parking lot images and video feeds using pre-trained YOLO11 with zero model training required.
 
-![Annotated Parking Lot](<img width="3000" height="2001" alt="imagepra_annotated" src="https://github.com/user-attachments/assets/7a6774ce-e3b9-4096-ac16-b9bf1a253575" />
+![Annotated Parking Lot](<img width="3000" height="2001" alt="imagepra_annotated" src="C:\Users\prave\Downloads\vehicle-counter\vehicle-counter\outputs\ui\imagepra_annotated.jpg" />
 )
 101 vehicles detected in the sample lot at native resolution. Bounding boxes are color-coded per vehicle class with confidence scores.
 
