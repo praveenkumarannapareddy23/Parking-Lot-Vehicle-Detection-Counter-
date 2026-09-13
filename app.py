@@ -276,39 +276,49 @@ st.markdown(
     .dot-blue {background: #6C63FF; color: #6C63FF;}
     .dot-amber {background: #fbbf24; color: #fbbf24;}
 
-    /* ── Source picker radio cards ───────────────────────────────────────── */
-    div[aria-label="Source Selector"] {
-        display: flex !important;
-        gap: 1.2rem !important;
-        width: 100% !important;
-        margin-bottom: 0.8rem !important;
+    /* ── Modern Radio Card & Pill Buttons (Hides raw radio dots) ─────── */
+    div[data-testid="stRadio"] input[type="radio"] {
+        display: none !important;
     }
-    div[aria-label="Source Selector"] > label {
+    div[data-testid="stRadio"] [data-baseweb="radio"] > div:first-child {
+        display: none !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 0.8rem !important;
+        width: 100% !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] > label {
         flex: 1 !important;
+        min-width: 140px !important;
         background: rgba(26, 29, 41, 0.7) !important;
         border: 2px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 16px !important;
-        padding: 1.2rem 1.5rem !important;
+        border-radius: 14px !important;
+        padding: 0.9rem 1.2rem !important;
         text-align: center !important;
         cursor: pointer !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         backdrop-filter: blur(20px) !important;
         font-weight: 600 !important;
-        color: #e8e8ec !important;
+        color: #a5b4c8 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        margin: 0 !important;
     }
-    div[aria-label="Source Selector"] > label:hover {
+    div[data-testid="stRadio"] div[role="radiogroup"] > label:hover {
         border-color: rgba(108, 99, 255, 0.5) !important;
         background: rgba(108, 99, 255, 0.1) !important;
+        color: #ffffff !important;
         transform: translateY(-2px) !important;
         box-shadow: 0 8px 24px rgba(108, 99, 255, 0.15) !important;
     }
-    div[aria-label="Source Selector"] > label[data-checked="true"],
-    div[aria-label="Source Selector"] > label:has(input:checked) {
+    div[data-testid="stRadio"] div[role="radiogroup"] > label:has(input:checked),
+    div[data-testid="stRadio"] div[role="radiogroup"] > label[data-checked="true"] {
         border-color: #6C63FF !important;
-        background: rgba(108, 99, 255, 0.2) !important;
+        background: rgba(108, 99, 255, 0.22) !important;
         box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25), 0 8px 24px rgba(108, 99, 255, 0.2) !important;
         color: #ffffff !important;
     }
