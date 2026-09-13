@@ -271,36 +271,38 @@ Web UI capabilities:
 
 ```
 vehicle-counter/
-├── detect_vehicles.py        # CLI entry point for image and video processing
-├── app.py                    # Streamlit web application & interactive dashboard
-├── requirements.txt          # Project package dependencies
-├── yolo11n.pt                # Ultralytics YOLO11 Nano model weights
-├── yolo11m.pt                # Ultralytics YOLO11 Medium model weights
+├── app.py                    # Interactive Streamlit Web Dashboard
+├── detect_vehicles.py        # Command Line Interface (CLI) entry point
+├── requirements.txt          # Python package dependencies
+├── README.md                 # Full project documentation & tech stack
+├── WALKTHROUGH.md            # Simplified study guide & system walkthrough
+├── .gitignore                # Git ignore configuration
+├── yolo11n.pt                # YOLO11 Nano model weights (~5.6 MB)
+├── yolo11m.pt                # YOLO11 Medium model weights (~40.6 MB)
 │
-├── vehicle_counter/          # Core vehicle counter package
+├── vehicle_counter/          # Core Python vehicle counter package
 │   ├── __init__.py           # Package exports
-│   ├── config.py             # Class mappings, color palettes & device detection
+│   ├── config.py             # Colors, class mappings & device detection
 │   ├── detector.py           # YOLO11 model wrapper & Detection data model
-│   ├── pipeline.py           # Core processing pipelines (process_image & process_video)
-│   ├── roi.py                # Normalized ROI geometry and point containment logic
-│   └── annotate.py           # OpenCV bounding box and summary overlay rendering
+│   ├── pipeline.py           # Image detection & video tracking pipelines
+│   ├── roi.py                # Normalized ROI geometry & point containment logic
+│   └── annotate.py           # Bounding box, class label & HUD renderer
 │
 ├── tools/                    # Helper utilities
 │   ├── fetch_samples.py      # Automated sample image and video downloader
 │   └── roi_picker.py         # Desktop OpenCV GUI for drawing and saving ROI JSONs
 │
-├── data/                     # Data assets directory
-│   ├── input/                # Downloaded sample images and videos
+├── data/                     # Data directory
+│   ├── input/                # Sample input images and traffic videos
 │   └── roi/                  # Saved ROI polygon JSON definitions
 │
-├── examples/                 # Committed sample outputs and visual proofs
+├── examples/                 # Committed sample output results
 │   ├── parking_lot_annotated.jpg
 │   ├── parking_lot_roi_annotated.jpg
 │   ├── street_traffic_annotated.mp4
 │   └── street_traffic_per_frame.csv
 │
-├── NOTES.md                  # Deep-dive benchmark notes and edge case analyses
-└── WALKTHROUGH.md            # Comprehensive technical guide & source code walkthrough
+└── outputs/                  # Processing output directory (Images, Videos, JSON/CSV)
 ```
 
 ## Features
