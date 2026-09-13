@@ -325,13 +325,13 @@ st.markdown(
         color: #ffffff !important;
     }
 
-    /* ── Styled Section Cards / Panels ─────────────────────────────────── */
-    .glass-card-panel {
+    /* ── Styled Section Cards / Panels (st.container(border=True)) ──────── */
+    [data-testid="stVerticalBlockBorderWrapper"] {
         background: rgba(26, 29, 41, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 18px !important;
         padding: 1.4rem 1.6rem;
-        margin-bottom: 1.4rem;
+        margin-bottom: 0.75rem;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         backdrop-filter: blur(20px);
     }
@@ -343,51 +343,6 @@ st.markdown(
         border-radius: 14px;
         padding: 1.1rem 1.3rem;
         margin: 0.8rem 0;
-    }
-
-    /* ── Result panel ───────────────────────────────────────────────────── */
-    .result-panel {
-        background: rgba(26, 29, 41, 0.5);
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 18px;
-        padding: 1.8rem;
-        margin: 1.2rem 0;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        backdrop-filter: blur(20px);
-    }
-    .result-panel h2 {
-        font-size: 1.4rem !important;
-        color: #e8e8ec !important;
-        margin-top: 0 !important;
-    }
-
-    /* ── Download buttons ───────────────────────────────────────────────── */
-    .dl-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 0.8rem;
-        margin-top: 1rem;
-    }
-    .dl-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        background: rgba(108,99,255,0.1);
-        border: 1px solid rgba(108,99,255,0.25);
-        border-radius: 12px;
-        padding: 0.8rem 1.1rem;
-        font-size: 0.85rem;
-        font-weight: 500;
-        color: #c4b5fd;
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-    .dl-btn:hover {
-        background: rgba(108,99,255,0.2);
-        border-color: rgba(108,99,255,0.5);
-        color: #ffffff;
-        transform: translateY(-1px);
     }
 
     /* ── Sidebar styling ────────────────────────────────────────────────── */
@@ -769,43 +724,41 @@ st.markdown(
 
 
 # ─── Source Selection ───────────────────────────────────────────────────────── #
-st.markdown('<div class="glass-card-panel">', unsafe_allow_html=True)
-section_header("📁", "Choose Source")
+with st.container(border=True):
+    section_header("📁", "Choose Source")
 
-samples = sorted(p for p in SAMPLE_DIR.glob("*") if p.suffix.lower() in MEDIA_EXTS)
-has_samples = len(samples) > 0
+    samples = sorted(p for p in SAMPLE_DIR.glob("*") if p.suffix.lower() in MEDIA_EXTS)
+    has_samples = len(samples) > 0
 
-# Source mode as interactive cards
-source_mode = None
-if has_samples:
-    source_mode_choice = st.radio(
-        "Source Selector",
-        ["📁 Bundled Samples", "📤 Upload a File"],
-        index=0,
-        horizontal=True,
-        label_visibility="collapsed",
-    )
-    source_mode = "Bundled sample" if "Bundled" in source_mode_choice else "Upload a file"
-else:
-    source_mode = "Upload a file"
+    # Source mode as interactive cards
+    source_mode = None
+    if has_samples:
+        source_mode_choice = st.radio(
+            "Source Selector",
+            ["📁 Bundled Samples", "📤 Upload a File"],
+            index=0,
+            horizontal=True,
+            label_visibility="collapsed",
+        )
+        source_mode = "Bundled sample" if "Bundled" in source_mode_choice else "Upload a file"
+    else:
+        source_mode = "Upload a file"
 
-source_path: Path | None = None
-workdir = st.session_state.setdefault("_workdir", Path(tempfile.mkdtemp(prefix="vc_")))
+    source_path: Path | None = None
+    workdir = st.session_state.setdefault("_workdir", Path(tempfile.mkdtemp(prefix="vc_")))
 
-if source_mode == "Bundled sample":
-    picked = st.selectbox("Sample file", samples, format_func=lambda p: p.name)
-    source_path = picked
-else:
-    uploaded = st.file_uploader(
-        "Upload an image or a video",
-        type=sorted(e.lstrip(".") for e in MEDIA_EXTS),
-        label_visibility="collapsed",
-    )
-    if uploaded:
-        source_path = workdir / uploaded.name
-        source_path.write_bytes(uploaded.getbuffer())
-
-st.markdown('</div>', unsafe_allow_html=True)
+    if source_mode == "Bundled sample":
+        picked = st.selectbox("Sample file", samples, format_func=lambda p: p.name)
+        source_path = picked
+    else:
+        uploaded = st.file_uploader(
+            "Upload an image or a video",
+            type=sorted(e.lstrip(".") for e in MEDIA_EXTS),
+            label_visibility="collapsed",
+        )
+        if uploaded:
+            source_path = workdir / uploaded.name
+            source_path.write_bytes(uploaded.getbuffer())
 
 if source_path is None:
     st.markdown(
@@ -831,117 +784,109 @@ height, width = preview.shape[:2]
 
 
 # ─── Region of Interest ─────────────────────────────────────────────────────── #
-st.markdown('<div class="glass-card-panel">', unsafe_allow_html=True)
-section_header("📐", "Region of Interest")
+with st.container(border=True):
+    section_header("📐", "Region of Interest")
 
-roi_files = sorted(ROI_DIR.glob("*.json"))
-roi_options = ["Whole frame", "Draw polygon", "Rectangle"]
-if roi_files:
-    roi_options.append("Saved polygon")
-roi_options.append("Upload JSON")
+    roi_files = sorted(ROI_DIR.glob("*.json"))
+    roi_options = ["Whole frame", "Draw polygon", "Rectangle"]
+    if roi_files:
+        roi_options.append("Saved polygon")
+    roi_options.append("Upload JSON")
 
-roi_mode = st.radio(
-    "ROI", roi_options, horizontal=True, label_visibility="collapsed",
-)
-
-roi: ROI | None = None
-roi_rule = "bottom"
-
-if roi_mode == "Draw polygon":
-    st.caption(
-        "Click on the image to drop points. **3+ points** define a region. "
-        "Points are normalized, so the same ROI works at any resolution."
-    )
-    points: list[tuple[float, float]] = st.session_state.setdefault("draw_points", [])
-
-    canvas = annotate.draw_polygon_in_progress(
-        preview.copy(), [(int(x * width), int(y * height)) for x, y in points]
-    )
-    click = streamlit_image_coordinates(
-        bgr_to_rgb(canvas), width=DRAW_WIDTH, key="roi_canvas", cursor="crosshair",
+    roi_mode = st.radio(
+        "ROI", roi_options, horizontal=True, label_visibility="collapsed",
     )
 
-    if click and click.get("unix_time") != st.session_state.get("last_click_time"):
-        st.session_state["last_click_time"] = click.get("unix_time")
-        points.append((click["x"] / click["width"], click["y"] / click["height"]))
-        st.rerun()
+    roi: ROI | None = None
+    roi_rule = "bottom"
 
-    btn_c1, btn_c2, btn_c3 = st.columns([1, 1, 4])
-    if btn_c1.button("↩ Undo", disabled=not points, width="stretch"):
-        points.pop()
-        st.rerun()
-    if btn_c2.button("🗑 Clear", disabled=not points, width="stretch"):
-        points.clear()
-        st.rerun()
-    btn_c3.markdown(
-        f'<div style="padding-top:0.5rem; color:#64748b; font-size:0.85rem;">'
-        f'<strong>{len(points)}</strong> point(s)'
-        f'{" ✅" if len(points) >= 3 else " — need 3 minimum"}</div>',
-        unsafe_allow_html=True,
-    )
-
-    if len(points) >= 3:
-        roi = ROI(points=list(points), name="drawn", normalized=True)
-        save_c1, save_c2 = st.columns([1, 3])
-        roi_name = save_c2.text_input(
-            "Save as", value="my_lot", label_visibility="collapsed",
-            placeholder="region name",
+    if roi_mode == "Draw polygon":
+        st.caption(
+            "Click on the image to drop points. **3+ points** define a region. "
+            "Points are normalized, so the same ROI works at any resolution."
         )
-        if save_c1.button("💾 Save", width="stretch"):
-            safe = "".join(c for c in roi_name if c.isalnum() or c in "-_") or "roi"
-            saved = ROI(points=list(points), name=safe, normalized=True).save(
-                ROI_DIR / f"{safe}.json"
-            )
-            st.success(
-                f"Saved to `{saved.relative_to(ROOT)}` — "
-                f"now available under **Saved polygon** and CLI `--roi`."
-            )
+        points: list[tuple[float, float]] = st.session_state.setdefault("draw_points", [])
 
-elif roi_mode == "Rectangle":
-    rect_c1, rect_c2 = st.columns(2)
-    with rect_c1:
-        left, right = st.slider("Horizontal", 0.0, 1.0, (0.0, 0.6), 0.01)
-    with rect_c2:
-        top, bottom = st.slider("Vertical", 0.0, 1.0, (0.15, 1.0), 0.01)
-    if right > left and bottom > top:
-        roi = ROI.from_rect(left, top, right, bottom, name="rectangle", normalized=True)
-    else:
-        st.warning("⚠️ Rectangle has no area — widen the range.")
+        canvas = annotate.draw_polygon_in_progress(
+            preview.copy(), [(int(x * width), int(y * height)) for x, y in points]
+        )
+        click = streamlit_image_coordinates(
+            bgr_to_rgb(canvas), width=DRAW_WIDTH, key="roi_canvas", cursor="crosshair",
+        )
 
-elif roi_mode == "Saved polygon":
-    picked_roi = st.selectbox("ROI file", roi_files, format_func=lambda p: p.name)
-    roi = ROI.load(picked_roi)
+        if click and click.get("unix_time") != st.session_state.get("last_click_time"):
+            st.session_state["last_click_time"] = click.get("unix_time")
+            points.append((click["x"] / click["width"], click["y"] / click["height"]))
+            st.rerun()
 
-elif roi_mode == "Upload JSON":
-    roi_file = st.file_uploader("ROI JSON from roi_picker.py", type=["json"], key="roi")
-    if roi_file:
-        roi_path = workdir / "roi.json"
-        roi_path.write_bytes(roi_file.getbuffer())
-        roi = ROI.load(roi_path)
+        btn_c1, btn_c2, btn_c3 = st.columns([1, 1, 4])
+        if btn_c1.button("↩ Undo", disabled=not points, width="stretch"):
+            points.pop()
+            st.rerun()
+        if btn_c2.button("🗑 Clear", disabled=not points, width="stretch"):
+            points.clear()
+            st.rerun()
+        btn_c3.markdown(
+            f'<div style="padding-top:0.5rem; color:#64748b; font-size:0.85rem;">'
+            f'<strong>{len(points)}</strong> point(s)'
+            f'{" ✅" if len(points) >= 3 else " — need 3 minimum"}</div>',
+            unsafe_allow_html=True,
+        )
 
-if roi is not None:
-    roi_info_c1, roi_info_c2 = st.columns([3, 2])
-    roi_info_c1.markdown(
-        f'<div style="background:#eff6ff; border-radius:8px; padding:0.5rem 0.8rem; '
-        f'font-size:0.85rem; color:#1e40af;">'
-        f'📌 <strong>{roi.name}</strong> — {len(roi.points)} points</div>',
-        unsafe_allow_html=True,
-    )
-    roi_rule = roi_info_c2.selectbox(
-        "Containment rule", ROI_RULES, index=0,
-        help="bottom = tire anchor (angled views); center = centroid; overlap = any box part.",
-        label_visibility="collapsed",
-    )
+        if len(points) >= 3:
+            roi = ROI(points=list(points), name="drawn", normalized=True)
+            if st.button("💾 Save Drawn ROI Polygon", width="stretch"):
+                saved = ROI(points=list(points), name="drawn_roi", normalized=True).save(
+                    ROI_DIR / "drawn_roi.json"
+                )
+                st.success(
+                    f"Saved to `{saved.relative_to(ROOT)}` — "
+                    f"now available under **Saved polygon** and CLI `--roi`."
+                )
 
-if roi_mode != "Draw polygon":
-    st.image(
-        bgr_to_rgb(annotate.draw_roi(preview.copy(), roi)),
-        caption=f"{source_path.name} — {width}×{height}"
-                + ("" if roi is None else f" — ROI '{roi.name}' shaded"),
-        width="stretch",
-    )
+    elif roi_mode == "Rectangle":
+        rect_c1, rect_c2 = st.columns(2)
+        with rect_c1:
+            left, right = st.slider("Horizontal", 0.0, 1.0, (0.0, 0.6), 0.01)
+        with rect_c2:
+            top, bottom = st.slider("Vertical", 0.0, 1.0, (0.15, 1.0), 0.01)
+        if right > left and bottom > top:
+            roi = ROI.from_rect(left, top, right, bottom, name="rectangle", normalized=True)
+        else:
+            st.warning("⚠️ Rectangle has no area — widen the range.")
 
-st.markdown('</div>', unsafe_allow_html=True)
+    elif roi_mode == "Saved polygon":
+        picked_roi = st.selectbox("ROI file", roi_files, format_func=lambda p: p.name)
+        roi = ROI.load(picked_roi)
+
+    elif roi_mode == "Upload JSON":
+        roi_file = st.file_uploader("ROI JSON from roi_picker.py", type=["json"], key="roi")
+        if roi_file:
+            roi_path = workdir / "roi.json"
+            roi_path.write_bytes(roi_file.getbuffer())
+            roi = ROI.load(roi_path)
+
+    if roi is not None:
+        roi_info_c1, roi_info_c2 = st.columns([3, 2])
+        roi_info_c1.markdown(
+            f'<div style="background:#eff6ff; border-radius:8px; padding:0.5rem 0.8rem; '
+            f'font-size:0.85rem; color:#1e40af;">'
+            f'📌 <strong>{roi.name}</strong> — {len(roi.points)} points</div>',
+            unsafe_allow_html=True,
+        )
+        roi_rule = roi_info_c2.selectbox(
+            "Containment rule", ROI_RULES, index=0,
+            help="bottom = tire anchor (angled views); center = centroid; overlap = any box part.",
+            label_visibility="collapsed",
+        )
+
+    if roi_mode != "Draw polygon":
+        st.image(
+            bgr_to_rgb(annotate.draw_roi(preview.copy(), roi)),
+            caption=f"{source_path.name} — {width}×{height}"
+                    + ("" if roi is None else f" — ROI '{roi.name}' shaded"),
+            width="stretch",
+        )
 
 
 # ─── Run Button ─────────────────────────────────────────────────────────────── #
@@ -983,68 +928,65 @@ if kind == "image":
         )
 
     # ── Results Panel ──────────────────────────────────────────────────── #
-    st.markdown('<div class="result-panel">', unsafe_allow_html=True)
-    section_header("📊", "Detection Results")
-    render_kpi_cards(result.counts, result.total)
+    with st.container(border=True):
+        section_header("📊", "Detection Results")
+        render_kpi_cards(result.counts, result.total)
 
-    # Annotated image
-    st.image(
-        bgr_to_rgb(cv2.imread(str(result.output_image))),
-        caption="Annotated output",
-        width="stretch",
-    )
-
-    # Inference info
-    st.markdown(
-        f'<div class="inference-strip">'
-        f'⏱️ Inference: <code>{result.elapsed_s * 1000:.0f} ms</code>'
-        f' &nbsp;|&nbsp; Device: <code>{detector.device}</code>'
-        f' &nbsp;|&nbsp; imgsz: <code>{detector.imgsz_for(preview)}</code>'
-        f' &nbsp;|&nbsp; Saved: <code>{result.output_image.relative_to(ROOT)}</code>'
-        f'</div>',
-        unsafe_allow_html=True,
-    )
-
-    # Details expander
-    with st.expander("🔎 Raw detections (what YOLO returned)", expanded=False):
-        st.dataframe(
-            pd.DataFrame([
-                {
-                    "class": d.cls_name,
-                    "confidence": f"{d.conf:.3f}",
-                    "x1": round(d.xyxy[0]),
-                    "y1": round(d.xyxy[1]),
-                    "x2": round(d.xyxy[2]),
-                    "y2": round(d.xyxy[3]),
-                    "w": round(d.wh[0]),
-                    "h": round(d.wh[1]),
-                }
-                for d in sorted(result.detections, key=lambda d: -d.conf)
-            ]),
-            width="stretch",
-            hide_index=True,
-        )
-
-    # Downloads
-    st.markdown('<div class="dl-grid">', unsafe_allow_html=True)
-    dl_c1, dl_c2 = st.columns(2)
-    dl_c1.download_button(
-        "📥 Download Annotated Image",
-        result.output_image.read_bytes(),
-        file_name=result.output_image.name,
-        mime="image/jpeg",
-        width="stretch",
-    )
-    if result.summary_json:
-        dl_c2.download_button(
-            "📥 Download Counts JSON",
-            result.summary_json.read_bytes(),
-            file_name=result.summary_json.name,
-            mime="application/json",
+        # Annotated image
+        st.image(
+            bgr_to_rgb(cv2.imread(str(result.output_image))),
+            caption="Annotated output",
             width="stretch",
         )
-    st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)  # end result-panel
+
+        # Inference info
+        st.markdown(
+            f'<div class="inference-strip">'
+            f'⏱️ Inference: <code>{result.elapsed_s * 1000:.0f} ms</code>'
+            f' &nbsp;|&nbsp; Device: <code>{detector.device}</code>'
+            f' &nbsp;|&nbsp; imgsz: <code>{detector.imgsz_for(preview)}</code>'
+            f' &nbsp;|&nbsp; Saved: <code>{result.output_image.relative_to(ROOT)}</code>'
+            f'</div>',
+            unsafe_allow_html=True,
+        )
+
+        # Details expander
+        with st.expander("🔎 Raw detections (what YOLO returned)", expanded=False):
+            st.dataframe(
+                pd.DataFrame([
+                    {
+                        "class": d.cls_name,
+                        "confidence": f"{d.conf:.3f}",
+                        "x1": round(d.xyxy[0]),
+                        "y1": round(d.xyxy[1]),
+                        "x2": round(d.xyxy[2]),
+                        "y2": round(d.xyxy[3]),
+                        "w": round(d.wh[0]),
+                        "h": round(d.wh[1]),
+                    }
+                    for d in sorted(result.detections, key=lambda d: -d.conf)
+                ]),
+                width="stretch",
+                hide_index=True,
+            )
+
+        # Downloads
+        dl_c1, dl_c2 = st.columns(2)
+        dl_c1.download_button(
+            "📥 Download Annotated Image",
+            result.output_image.read_bytes(),
+            file_name=result.output_image.name,
+            mime="image/jpeg",
+            width="stretch",
+        )
+        if result.summary_json:
+            dl_c2.download_button(
+                "📥 Download Counts JSON",
+                result.summary_json.read_bytes(),
+                file_name=result.summary_json.name,
+                mime="application/json",
+                width="stretch",
+            )
 
 else:
     # ── Video Processing ───────────────────────────────────────────────── #
@@ -1066,75 +1008,72 @@ else:
     )
     bar.empty()
 
-    st.markdown('<div class="result-panel">', unsafe_allow_html=True)
+    with st.container(border=True):
+        # ── Occupancy Section ──────────────────────────────────────────── #
+        section_header("📊", "Occupancy (how full it gets)")
+        occ_c1, occ_c2 = st.columns(2)
+        occ_c1.metric("Peak vehicles in one frame", result.peak_occupancy)
+        occ_c2.metric("Mean vehicles per frame", f"{result.mean_occupancy:.1f}")
+        render_kpi_cards(result.peak_counts, result.peak_occupancy)
 
-    # ── Occupancy Section ──────────────────────────────────────────────── #
-    section_header("📊", "Occupancy (how full it gets)")
-    occ_c1, occ_c2 = st.columns(2)
-    occ_c1.metric("Peak vehicles in one frame", result.peak_occupancy)
-    occ_c2.metric("Mean vehicles per frame", f"{result.mean_occupancy:.1f}")
-    render_kpi_cards(result.peak_counts, result.peak_occupancy)
+        # ── Unique Vehicles Section ────────────────────────────────────── #
+        if use_tracking:
+            section_header("🔄", "Unique Vehicles (how many came through)")
+            uniq_c1, uniq_c2 = st.columns(2)
+            uniq_c1.metric(
+                "Unique vehicles", result.unique_total,
+                help="Distinct track IDs surviving the minimum-frames filter.",
+            )
+            uniq_c2.metric(
+                "Raw track IDs", result.unique_raw,
+                help="Before filtering. The gap is tracker ID churn.",
+            )
+            if result.unique_by_class:
+                render_kpi_cards(result.unique_by_class, result.unique_total)
 
-    # ── Unique Vehicles Section ────────────────────────────────────────── #
-    if use_tracking:
-        section_header("🔄", "Unique Vehicles (how many came through)")
-        uniq_c1, uniq_c2 = st.columns(2)
-        uniq_c1.metric(
-            "Unique vehicles", result.unique_total,
-            help="Distinct track IDs surviving the minimum-frames filter.",
+        # ── Video playback ─────────────────────────────────────────────── #
+        section_header("🎬", "Annotated Video")
+        st.video(result.output_video.read_bytes())
+        st.markdown(
+            f'<div class="inference-strip">'
+            f'⏱️ Processed <code>{result.frames_processed}</code> frames in '
+            f'<code>{result.elapsed_s:.1f}s</code> '
+            f'(<code>{result.fps_processing:.1f} FPS</code>) on '
+            f'<code>{detector.device}</code>'
+            f'</div>',
+            unsafe_allow_html=True,
         )
-        uniq_c2.metric(
-            "Raw track IDs", result.unique_raw,
-            help="Before filtering. The gap is tracker ID churn.",
-        )
-        if result.unique_by_class:
-            render_kpi_cards(result.unique_by_class, result.unique_total)
 
-    # ── Video playback ─────────────────────────────────────────────────── #
-    section_header("🎬", "Annotated Video")
-    st.video(result.output_video.read_bytes())
-    st.markdown(
-        f'<div class="inference-strip">'
-        f'⏱️ Processed <code>{result.frames_processed}</code> frames in '
-        f'<code>{result.elapsed_s:.1f}s</code> '
-        f'(<code>{result.fps_processing:.1f} FPS</code>) on '
-        f'<code>{detector.device}</code>'
-        f'</div>',
-        unsafe_allow_html=True,
-    )
+        # ── Occupancy chart ────────────────────────────────────────────── #
+        if result.per_frame:
+            section_header("📈", "Occupancy Over Time")
+            chart_df = pd.DataFrame(result.per_frame)[["time_s", "occupancy"]].set_index("time_s")
+            chart_df.columns = ["vehicles in frame"]
+            st.area_chart(chart_df, color="#3b82f6")
 
-    # ── Occupancy chart ────────────────────────────────────────────────── #
-    if result.per_frame:
-        section_header("📈", "Occupancy Over Time")
-        chart_df = pd.DataFrame(result.per_frame)[["time_s", "occupancy"]].set_index("time_s")
-        chart_df.columns = ["vehicles in frame"]
-        st.area_chart(chart_df, color="#3b82f6")
-
-    # ── Downloads ──────────────────────────────────────────────────────── #
-    section_header("📥", "Downloads")
-    dl_c1, dl_c2 = st.columns(2)
-    dl_c1.download_button(
-        "📥 Download Annotated Video",
-        result.output_video.read_bytes(),
-        file_name=result.output_video.name,
-        mime="video/mp4",
-        width="stretch",
-    )
-    if result.per_frame_csv:
-        dl_c2.download_button(
-            "📥 Download Per-Frame CSV",
-            result.per_frame_csv.read_bytes(),
-            file_name=result.per_frame_csv.name,
-            mime="text/csv",
+        # ── Downloads ──────────────────────────────────────────────────── #
+        section_header("📥", "Downloads")
+        dl_c1, dl_c2 = st.columns(2)
+        dl_c1.download_button(
+            "📥 Download Annotated Video",
+            result.output_video.read_bytes(),
+            file_name=result.output_video.name,
+            mime="video/mp4",
             width="stretch",
         )
-    if result.summary_json:
-        st.download_button(
-            "📥 Download Summary JSON",
-            result.summary_json.read_bytes(),
-            file_name=result.summary_json.name,
-            mime="application/json",
-            width="stretch",
-        )
-
-    st.markdown("</div>", unsafe_allow_html=True)  # end result-panel
+        if result.per_frame_csv:
+            dl_c2.download_button(
+                "📥 Download Per-Frame CSV",
+                result.per_frame_csv.read_bytes(),
+                file_name=result.per_frame_csv.name,
+                mime="text/csv",
+                width="stretch",
+            )
+        if result.summary_json:
+            st.download_button(
+                "📥 Download Summary JSON",
+                result.summary_json.read_bytes(),
+                file_name=result.summary_json.name,
+                mime="application/json",
+                width="stretch",
+            )
