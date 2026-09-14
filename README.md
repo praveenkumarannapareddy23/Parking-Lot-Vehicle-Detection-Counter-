@@ -12,7 +12,6 @@ An easy-to-use computer vision system to detect, track, and count vehicles (cars
 *101 vehicles detected (96 cars, 4 trucks, 1 bus) in sample lot via Streamlit UI output (examples/imagepra_annotated.jpg). Bounding boxes are color-coded per vehicle class with confidence scores.*
 
 
-
 ## Description
 
 The Parking Lot and Traffic Vehicle Counter is a computer vision application built to automate vehicle monitoring, parking lot occupancy counting, and traffic flow analysis. It includes both a Command Line Interface (CLI) and an interactive Streamlit web dashboard.
