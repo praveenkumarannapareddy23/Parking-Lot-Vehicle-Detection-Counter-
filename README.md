@@ -9,7 +9,7 @@
 An easy-to-use computer vision system to detect, track, and count vehicles (cars, motorcycles, buses, and trucks) in parking lot images and video feeds using pre-trained YOLO11 with zero model training required.
 
 ![Annotated Parking Lot UI Output](examples/imagepra_annotated.jpg)
-*98 vehicles detected (79 cars, 1 trucks, 1 bus) in sample lot via Streamlit UI output (examples/imagepra_annotated.jpg). Bounding boxes are color-coded per vehicle class with confidence scores.*
+*98 vehicles detected (79 cars,17 motorcycle 1 trucks, 1 bus) in sample lot via Streamlit UI output (examples/imagepra_annotated.jpg). Bounding boxes are color-coded per vehicle class with confidence scores.*
 
 
 ## Description
